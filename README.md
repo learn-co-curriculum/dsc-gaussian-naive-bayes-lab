@@ -187,6 +187,8 @@ y = df.target
 
 While not demonstrated in the previous lesson, you've seen from your work with regression that an appropriate methodology to determine how well your algorithm will generalize to new data is to perform a train test split. 
 
+> Note: Use random state 22 to have your results match those of the solution branch provided.
+
 
 ```python
 #Your code here; perform a train-test split
