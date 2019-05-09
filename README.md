@@ -354,7 +354,7 @@ aggs
 
 Recall that the point estimate is given by the probability density function of the normal distribution:  
 
-## $$ P(x_i|y) = \frac{1}{\sqrt{2\bullet \pi \sigma_i^2}}e^{\frac{-(x-\mu_i)^2}{2\sigma_i^2}}$$
+$$ \large P(x_i|y) = \frac{1}{\sqrt{2\pi \sigma_i^2}}e^{\frac{-(x-\mu_i)^2}{2\sigma_i^2}}$$
 
 > Note: Feel free to use the built in function from SciPy to do this as demonstrated in the lesson. Alternatively, take the time to code the above formula from scratch.
 
@@ -434,10 +434,6 @@ print('Training Accuracy: {}\tTesting Accuracy: {}'.format(acc_train, acc_test))
 
     Training Accuracy: 0.8414096916299559	Testing Accuracy: 0.8289473684210527
 
-
-## Summary
-
-Well done! In this lab, you implemented the Gaussian Naive Bayes classifier from scratch, used it to generate classification predictions and then validated the accuracy of the model. If you wish to go further, continue on below with some optional extension exercises.
 
 ## Level-Up
 
@@ -527,7 +523,7 @@ plt.legend(loc=(1.01,.85));
 ```
 
 
-![png](index_files/index_25_0.png)
+![png](index_files/index_24_0.png)
 
 
 > Comment: Not a wild difference from our point estimates obtained by using points from the PDF itself, but there is some impact. Interestingly, these graphs will differ substantially in shape depending on the initial train test split used. The recommendation would be to use the point estimates from the PDF itself, or a modest band-width size.
@@ -601,7 +597,11 @@ plt.xlabel('Resting Blood Pressure')
 
 
 
-![png](index_files/index_30_2.png)
+![png](index_files/index_29_2.png)
 
 
 > Comment: See https://matplotlib.org/gallery/showcase/integral.html for further details on plotting shaded integral areas under curves.
+
+## Summary
+
+Well done! In this lab, you implemented the Gaussian Naive Bayes classifier from scratch, used it to generate classification predictions and then validated the accuracy of the model. If you wish to go further, continue on below with some optional extension exercises.
