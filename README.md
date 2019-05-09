@@ -53,7 +53,7 @@ Now, calculate the mean and standard deviation for each feature within each of t
 
 Recall that the point estimate is given by the probability density function of the normal distribution:  
 
-## $$ P(x_i|y) = \frac{1}{\sqrt{2\bullet \pi \sigma_i^2}}e^{\frac{-(x-\mu_i)^2}{2\sigma_i^2}}$$
+ $$ \large P(x_i|y) = \frac{1}{\sqrt{2 \pi \sigma_i^2}}e^{\frac{-(x-\mu_i)^2}{2\sigma_i^2}}$$
 
 > Note: Feel free to use the built in function from SciPy to do this as demonstrated in the lesson. Alternatively, take the time to code the above formula from scratch.
 
@@ -84,10 +84,6 @@ Define a prediction function that will return a predicted class value for a part
 ```python
 #Your code here
 ```
-
-## Summary
-
-Well done! In this lab, you implemented the Gaussian Naive Bayes classifier from scratch, used it to generate classification predictions and then validated the accuracy of the model. If you wish to go further, continue on below with some optional extension exercises.
 
 ## Level-Up
 
@@ -204,7 +200,11 @@ plt.xlabel('Resting Blood Pressure')
 
 
 
-![png](index_files/index_27_2.png)
+![png](index_files/index_26_2.png)
 
 
 > Comment: See https://matplotlib.org/gallery/showcase/integral.html for further details on plotting shaded integral areas under curves.
+
+## Summary
+
+Well done! In this lab, you implemented the Gaussian Naive Bayes classifier from scratch, used it to generate classification predictions and then validated the accuracy of the model. If you wish to go further, continue on below with some optional extension exercises.
