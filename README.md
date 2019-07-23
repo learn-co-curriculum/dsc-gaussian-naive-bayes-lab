@@ -204,7 +204,7 @@ Now, calculate the mean and standard deviation for each feature within each of t
 ```python
 #Your code here; calculate the mean and standard deviation for each feature within each class for the training set
 train = pd.concat([X_train, y_train], axis=1)
-aggs = df.groupby('target').agg(['mean', 'std'])
+aggs = train.groupby('target').agg(['mean', 'std'])
 aggs
 ```
 
@@ -297,51 +297,51 @@ aggs
   <tbody>
     <tr>
       <th>0</th>
-      <td>56.601449</td>
-      <td>7.962082</td>
-      <td>0.826087</td>
-      <td>0.380416</td>
-      <td>0.478261</td>
-      <td>0.905920</td>
-      <td>134.398551</td>
-      <td>18.729944</td>
-      <td>251.086957</td>
-      <td>49.454614</td>
+      <td>57.281553</td>
+      <td>8.009085</td>
+      <td>0.796117</td>
+      <td>0.404853</td>
+      <td>0.466019</td>
+      <td>0.916253</td>
+      <td>134.067961</td>
+      <td>18.919469</td>
+      <td>251.543689</td>
+      <td>52.341596</td>
       <td>...</td>
-      <td>0.550725</td>
-      <td>0.499232</td>
-      <td>1.585507</td>
-      <td>1.300340</td>
-      <td>1.166667</td>
-      <td>0.561324</td>
-      <td>1.166667</td>
-      <td>1.043460</td>
-      <td>2.543478</td>
-      <td>0.684762</td>
+      <td>0.543689</td>
+      <td>0.500523</td>
+      <td>1.600971</td>
+      <td>1.310253</td>
+      <td>1.184466</td>
+      <td>0.555676</td>
+      <td>1.213592</td>
+      <td>1.025656</td>
+      <td>2.582524</td>
+      <td>0.602678</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>52.496970</td>
-      <td>9.550651</td>
-      <td>0.563636</td>
-      <td>0.497444</td>
-      <td>1.375758</td>
-      <td>0.952222</td>
-      <td>129.303030</td>
-      <td>16.169613</td>
-      <td>242.230303</td>
-      <td>53.552872</td>
+      <td>52.322581</td>
+      <td>9.995567</td>
+      <td>0.564516</td>
+      <td>0.497832</td>
+      <td>1.427419</td>
+      <td>0.972578</td>
+      <td>129.137097</td>
+      <td>16.589415</td>
+      <td>240.516129</td>
+      <td>46.683240</td>
       <td>...</td>
-      <td>0.139394</td>
-      <td>0.347412</td>
-      <td>0.583030</td>
-      <td>0.780683</td>
-      <td>1.593939</td>
-      <td>0.593635</td>
-      <td>0.363636</td>
-      <td>0.848894</td>
-      <td>2.121212</td>
-      <td>0.465752</td>
+      <td>0.161290</td>
+      <td>0.369291</td>
+      <td>0.592742</td>
+      <td>0.749544</td>
+      <td>1.580645</td>
+      <td>0.612827</td>
+      <td>0.354839</td>
+      <td>0.818422</td>
+      <td>2.072581</td>
+      <td>0.444906</td>
     </tr>
   </tbody>
 </table>
