@@ -558,8 +558,6 @@ import scipy.stats as stats
 sns.set_style('white')
 ```
 
-> Comment: See https://matplotlib.org/gallery/showcase/integral.html for further details on plotting shaded integral areas under curves.
-
 
 ```python
 x = np.linspace(temp.min(), temp.max(), num=10**3)
@@ -599,8 +597,10 @@ plt.xlabel('Resting Blood Pressure')
 
 
 
-![png](index_files/index_30_2.png)
+![png](index_files/index_29_2.png)
 
+
+> Comment: See https://matplotlib.org/gallery/showcase/integral.html for further details on plotting shaded integral areas under curves.
 
 ## Summary
 
