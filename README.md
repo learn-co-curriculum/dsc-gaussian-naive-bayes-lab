@@ -703,8 +703,6 @@ plt.xlabel('Resting Blood Pressure')
 ![png](index_files/index_42_2.png)
 
 
-> Comment: See https://matplotlib.org/gallery/showcase/integral.html for further details on plotting shaded integral areas under curves.
-
 
 ```python
 # __SOLUTION__ 
@@ -745,8 +743,10 @@ plt.xlabel('Resting Blood Pressure')
 
 
 
-![png](index_files/index_44_2.png)
+![png](index_files/index_43_2.png)
 
+
+> Comment: See https://matplotlib.org/gallery/showcase/integral.html for further details on plotting shaded integral areas under curves.
 
 ## Summary
 
