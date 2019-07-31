@@ -159,19 +159,10 @@ df.head()
 
 
 
-## Define the Problem
-
-As discussed, the dataset contains various patient measurements along with a 'target' variable indicating whether or not the individual has heart disease. Define X and y below.
-
 
 ```python
 # __SOLUTION__ 
 pd.plotting.scatter_matrix(df, figsize=(10,10)); #Optional but always recommended; briefly explore your dataset
-```
-
-
-```python
-#Your code here
 ```
 
 
@@ -189,6 +180,23 @@ df.target.value_counts() #Optional but always recommended; briefly explore your 
 
 
 
+## Define the Problem
+
+As discussed, the dataset contains various patient measurements along with a 'target' variable indicating whether or not the individual has heart disease. Define X and y below.
+
+
+```python
+#Your code here
+```
+
+
+```python
+# __SOLUTION__ 
+#Your code here
+X = df[[col for col in df.columns if col!='target']]
+y = df.target
+```
+
 ## Perform a Train-Test Split
 
 While not demonstrated in the previous lesson, you've seen from your work with regression that an appropriate methodology to determine how well your algorithm will generalize to new data is to perform a train test split. 
@@ -203,9 +211,9 @@ While not demonstrated in the previous lesson, you've seen from your work with r
 
 ```python
 # __SOLUTION__ 
-#Your code here
-X = df[[col for col in df.columns if col!='target']]
-y = df.target
+#Your code here; perform a train-test split
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X,y, random_state=22)
 ```
 
 ## Calculate the Mean & Standard Deviation of Each Feature for Each Class In the Train Set
@@ -215,27 +223,6 @@ Now, calculate the mean and standard deviation for each feature within each of t
 
 ```python
 #Your code here; calculate the mean and standard deviation for each feature within each class for the training set
-```
-
-
-```python
-# __SOLUTION__ 
-#Your code here; perform a train-test split
-from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X,y, random_state=22)
-```
-
-## Define a Function to Calculate the Point Estimate for the Conditional Probability of a Feature Value for a Given Class
-
-Recall that the point estimate is given by the probability density function of the normal distribution:  
-
- $$ \large P(x_i|y) = \frac{1}{\sqrt{2 \pi \sigma_i^2}}e^{\frac{-(x-\mu_i)^2}{2\sigma_i^2}}$$
-
-> Note: Feel free to use the built in function from SciPy to do this as demonstrated in the lesson. Alternatively, take the time to code the above formula from scratch.
-
-
-```python
-#Your code here
 ```
 
 
@@ -389,13 +376,17 @@ aggs
 
 
 
-## Define a Prediction Function 
+## Define a Function to Calculate the Point Estimate for the Conditional Probability of a Feature Value for a Given Class
 
-Define a prediction function that will return a predicted class value for a particular observation. To do this, calculate the point estimates for each of the features using your function above. Then, take the product of these point estimates for a given class and multiply it by the probability of that particular class. Take the class associated with the largest probability output from these calculations as your prediction.
+Recall that the point estimate is given by the probability density function of the normal distribution:  
+
+ $$ \large P(x_i|y) = \frac{1}{\sqrt{2 \pi \sigma_i^2}}e^{\frac{-(x-\mu_i)^2}{2\sigma_i^2}}$$
+
+> Note: Feel free to use the built in function from SciPy to do this as demonstrated in the lesson. Alternatively, take the time to code the above formula from scratch.
 
 
 ```python
-##Your code here
+#Your code here
 ```
 
 
@@ -421,11 +412,13 @@ p_x_given_class(X_train.iloc[0], X.columns[0], 0)
 
 
 
-## Apply Your Prediction Function to the Train and Test Sets
+## Define a Prediction Function 
+
+Define a prediction function that will return a predicted class value for a particular observation. To do this, calculate the point estimates for each of the features using your function above. Then, take the product of these point estimates for a given class and multiply it by the probability of that particular class. Take the class associated with the largest probability output from these calculations as your prediction.
 
 
 ```python
-#Your code here
+##Your code here
 ```
 
 
@@ -443,8 +436,6 @@ def predict_class(obs_row):
     return np.argmax(c_probs)
 ```
 
-## Calculate the Train and Test Accuracy
-
 
 ```python
 # __SOLUTION__ 
@@ -458,10 +449,42 @@ predict_class(X_train.iloc[0])
 
 
 
+## Apply Your Prediction Function to the Train and Test Sets
+
 
 ```python
 #Your code here
 ```
+
+
+```python
+# __SOLUTION__ 
+#Your code here
+y_hat_train = [predict_class(X_train.iloc[idx]) for idx in range(len(X_train))]
+y_hat_test = [predict_class(X_test.iloc[idx]) for idx in range(len(X_test))]
+```
+
+## Calculate the Train and Test Accuracy
+
+
+```python
+#Your code here
+```
+
+
+```python
+# __SOLUTION__ 
+#Your code here
+residuals_train = y_hat_train == y_train
+acc_train = residuals_train.sum()/len(residuals_train)
+
+residuals_test = y_hat_test == y_test
+acc_test = residuals_test.sum()/len(residuals_test)
+print('Training Accuracy: {}\tTesting Accuracy: {}'.format(acc_train, acc_test))
+```
+
+    Training Accuracy: 0.8414096916299559	Testing Accuracy: 0.8289473684210527
+
 
 ## Level-Up
 
@@ -480,14 +503,6 @@ With that, write such a function below.
 
 
 ```python
-# __SOLUTION__ 
-#Your code here
-y_hat_train = [predict_class(X_train.iloc[idx]) for idx in range(len(X_train))]
-y_hat_test = [predict_class(X_test.iloc[idx]) for idx in range(len(X_test))]
-```
-
-
-```python
 def p_band_x_given_class(obs_row, feature, c, range_width_std):
     """obs_row is the observation in question.
     feature is the feature of the observation row for which you are calculating a conditional probability for.
@@ -496,34 +511,6 @@ def p_band_x_given_class(obs_row, feature, c, range_width_std):
     #Your code here
     return p_x_given_y
 ```
-
-## Update the Prediction Function
-
-Now, update the prediction function to use this new conditional probability function. Be sure that you can pass in through the range width variable to this wrapper function.
-
-
-```python
-# __SOLUTION__ 
-#Your code here
-residuals_train = y_hat_train == y_train
-acc_train = residuals_train.sum()/len(residuals_train)
-
-residuals_test = y_hat_test == y_test
-acc_test = residuals_test.sum()/len(residuals_test)
-print('Training Accuracy: {}\tTesting Accuracy: {}'.format(acc_train, acc_test))
-```
-
-    Training Accuracy: 0.8414096916299559	Testing Accuracy: 0.8289473684210527
-
-
-
-```python
-#Your code here; update the prediction function
-```
-
-## Experiment with the Impact of Various Range-Widths
-
-Finally, create a for loop to measure the impact of varying range-widths on the classifier's test and train accuracy. Iterate over various range-widths from .1 standard deviations to 2 standard deviations. For each of these, store the associated test and train accuracies. Finally, plot these on a graph. The x-axis should be the associated range-width (expressed in standard deviations; each feature will have a unique width applicable to the specific scale). The y-axis will be the associated accuracy. Be sure to include a legend for train accuracy versus test accuracy.
 
 
 ```python
@@ -546,12 +533,14 @@ def p_band_x_given_class(obs_row, feature, c, range_width_std):
     return p_x_given_y
 ```
 
+## Update the Prediction Function
+
+Now, update the prediction function to use this new conditional probability function. Be sure that you can pass in through the range width variable to this wrapper function.
+
 
 ```python
-#Your code here
+#Your code here; update the prediction function
 ```
-
-> Comment: Not a wild difference from our point estimates obtained by using points from the PDF itself, but there is some impact. Interestingly, these graphs will differ substantially in shape depending on the initial train test split used. The recommendation would be to use the point estimates from the PDF itself, or a modest band-width size.
 
 
 ```python
@@ -570,25 +559,14 @@ def predict_class(obs_row, how='bands', range_width_std=.25):
     return np.argmax(c_probs)
 ```
 
-## Additional Appendix: Plotting PDFs and Probability Integrals
+## Experiment with the Impact of Various Range-Widths
 
-Below, feel free to take a look at the code used to generate the PDF graph image above.
+Finally, create a for loop to measure the impact of varying range-widths on the classifier's test and train accuracy. Iterate over various range-widths from .1 standard deviations to 2 standard deviations. For each of these, store the associated test and train accuracies. Finally, plot these on a graph. The x-axis should be the associated range-width (expressed in standard deviations; each feature will have a unique width applicable to the specific scale). The y-axis will be the associated accuracy. Be sure to include a legend for train accuracy versus test accuracy.
 
 
 ```python
-temp = df[df.target==1]['trestbps']
-aggs = temp.agg(['mean', 'std'])
-aggs
+#Your code here
 ```
-
-
-
-
-    mean    129.303030
-    std      16.169613
-    Name: trestbps, dtype: float64
-
-
 
 
 ```python
@@ -620,62 +598,30 @@ plt.legend(loc=(1.01,.85));
 ```
 
 
-![png](index_files/index_38_0.png)
+![png](index_files/index_35_0.png)
 
 
+> Comment: Not a wild difference from our point estimates obtained by using points from the PDF itself, but there is some impact. Interestingly, these graphs will differ substantially in shape depending on the initial train test split used. The recommendation would be to use the point estimates from the PDF itself, or a modest band-width size.
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.patches import Polygon
-import seaborn as sns
-import scipy.stats as stats
-sns.set_style('white')
-```
+## Additional Appendix: Plotting PDFs and Probability Integrals
+
+Below, feel free to take a look at the code used to generate the PDF graph image above.
 
 
 ```python
-x = np.linspace(temp.min(), temp.max(), num=10**3)
-pdf = stats.norm.pdf(x, loc=aggs['mean'], scale=aggs['std'])
-xi = 145
-width = 2
-xi_lower = xi - width/2
-xi_upper = xi + width/2
-
-fig, ax = plt.subplots()
-
-plt.plot(x, pdf)
-
-# Make the shaded region
-ix = np.linspace(xi_lower, xi_upper)
-iy = stats.norm.pdf(ix, loc=aggs['mean'], scale=aggs['std'])
-verts = [(xi_lower, 0), *zip(ix, iy), (xi_upper, 0)]
-poly = Polygon(verts, facecolor='0.9', edgecolor='0.5')
-ax.add_patch(poly);
-
-plt.plot((145, 145), (0, stats.norm.pdf(145, loc=aggs['mean'], scale=aggs['std'])), linestyle='dotted')
-p_area = stats.norm.cdf(xi_upper, loc=aggs['mean'], scale=aggs['std']) - stats.norm.cdf(xi_lower, loc=aggs['mean'], scale=aggs['std'])
-print('Probability of Blood Pressure Falling withing Range for the Given Class: {}'.format(p_area))
-plt.title('Conditional Probability of Resting Blood Pressure ~145 for Those With Heart Disease')
-plt.ylabel('Probability Density')
-plt.xlabel('Resting Blood Pressure')
+temp = df[df.target==1]['trestbps']
+aggs = temp.agg(['mean', 'std'])
+aggs
 ```
 
-    Probability of Blood Pressure Falling withing Range for the Given Class: 0.03080251623846908
 
 
 
+    mean    129.303030
+    std      16.169613
+    Name: trestbps, dtype: float64
 
 
-    Text(0.5,0,'Resting Blood Pressure')
-
-
-
-
-![png](index_files/index_40_2.png)
-
-
-> Comment: See https://matplotlib.org/gallery/showcase/integral.html for further details on plotting shaded integral areas under curves.
 
 
 ```python
@@ -694,9 +640,15 @@ aggs
 
 
 
-## Summary
 
-Well done! In this lab, you implemented the Gaussian Naive Bayes classifier from scratch, used it to generate classification predictions and then validated the accuracy of the model. If you wish to go further, continue on below with some optional extension exercises.
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import Polygon
+import seaborn as sns
+import scipy.stats as stats
+sns.set_style('white')
+```
 
 
 ```python
@@ -708,6 +660,50 @@ import seaborn as sns
 import scipy.stats as stats
 sns.set_style('white')
 ```
+
+
+```python
+x = np.linspace(temp.min(), temp.max(), num=10**3)
+pdf = stats.norm.pdf(x, loc=aggs['mean'], scale=aggs['std'])
+xi = 145
+width = 2
+xi_lower = xi - width/2
+xi_upper = xi + width/2
+
+fig, ax = plt.subplots()
+
+plt.plot(x, pdf)
+
+# Make the shaded region
+ix = np.linspace(xi_lower, xi_upper)
+iy = stats.norm.pdf(ix, loc=aggs['mean'], scale=aggs['std'])
+verts = [(xi_lower, 0), *zip(ix, iy), (xi_upper, 0)]
+poly = Polygon(verts, facecolor='0.9', edgecolor='0.5')
+ax.add_patch(poly);
+
+plt.plot((145, 145), (0, stats.norm.pdf(145, loc=aggs['mean'], scale=aggs['std'])), linestyle='dotted')
+p_area = stats.norm.cdf(xi_upper, loc=aggs['mean'], scale=aggs['std']) - stats.norm.cdf(xi_lower, loc=aggs['mean'], scale=aggs['std'])
+print('Probability of Blood Pressure Falling withing Range for the Given Class: {}'.format(p_area))
+plt.title('Conditional Probability of Resting Blood Pressure ~145 for Those With Heart Disease')
+plt.ylabel('Probability Density')
+plt.xlabel('Resting Blood Pressure')
+```
+
+    Probability of Blood Pressure Falling withing Range for the Given Class: 0.03080251623846908
+
+
+
+
+
+    Text(0.5,0,'Resting Blood Pressure')
+
+
+
+
+![png](index_files/index_42_2.png)
+
+
+> Comment: See https://matplotlib.org/gallery/showcase/integral.html for further details on plotting shaded integral areas under curves.
 
 
 ```python
@@ -749,5 +745,9 @@ plt.xlabel('Resting Blood Pressure')
 
 
 
-![png](index_files/index_45_2.png)
+![png](index_files/index_44_2.png)
 
+
+## Summary
+
+Well done! In this lab, you implemented the Gaussian Naive Bayes classifier from scratch, used it to generate classification predictions and then validated the accuracy of the model. If you wish to go further, continue on below with some optional extension exercises.
