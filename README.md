@@ -354,7 +354,7 @@ aggs
 
 Recall that the point estimate is given by the probability density function of the normal distribution:  
 
-$$ \large P(x_i|y) = \frac{1}{\sqrt{2\pi \sigma_i^2}}e^{\frac{-(x-\mu_i)^2}{2\sigma_i^2}}$$
+ $$ \large P(x_i|y) = \frac{1}{\sqrt{2 \pi \sigma_i^2}}e^{\frac{-(x-\mu_i)^2}{2\sigma_i^2}}$$
 
 > Note: Feel free to use the built in function from SciPy to do this as demonstrated in the lesson. Alternatively, take the time to code the above formula from scratch.
 
@@ -558,6 +558,8 @@ import scipy.stats as stats
 sns.set_style('white')
 ```
 
+> Comment: See https://matplotlib.org/gallery/showcase/integral.html for further details on plotting shaded integral areas under curves.
+
 
 ```python
 x = np.linspace(temp.min(), temp.max(), num=10**3)
@@ -597,10 +599,8 @@ plt.xlabel('Resting Blood Pressure')
 
 
 
-![png](index_files/index_29_2.png)
+![png](index_files/index_30_2.png)
 
-
-> Comment: See https://matplotlib.org/gallery/showcase/integral.html for further details on plotting shaded integral areas under curves.
 
 ## Summary
 
