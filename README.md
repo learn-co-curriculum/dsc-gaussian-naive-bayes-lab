@@ -113,7 +113,7 @@ def p_band_x_given_class(obs_row, feature, c, range_width_std):
 
 ## Update the Prediction Function
 
-Now, update the prediction function to use this new conditional probability function. Be sure that you can pass in through the range width variable to this wrapper function.
+Now, update the prediction function to use this new conditional probability function. Be sure that you can pass in the range width variable to this wrapper function.
 
 
 ```python
@@ -129,7 +129,7 @@ Finally, create a for loop to measure the impact of varying range-widths on the 
 #Your code here
 ```
 
-> Comment: Not a wild difference from our point estimates obtained by using points from the PDF itself, but there is some impact. Interestingly, these graphs will differ substantially in shape depending on the initial train test split used. The recommendation would be to use the point estimates from the PDF itself, or a modest band-width size.
+> Comment: Not a wild difference from our point estimates obtained by using points from the PDF itself, but there is some impact. **Interestingly, these graphs will differ substantially in shape depending on the initial train test split used.** The recommendation would be to use the point estimates from the PDF itself, or a modest band-width size.
 
 ## Additional Appendix: Plotting PDFs and Probability Integrals
 
@@ -141,15 +141,6 @@ temp = df[df.target==1]['trestbps']
 aggs = temp.agg(['mean', 'std'])
 aggs
 ```
-
-
-
-
-    mean    129.303030
-    std      16.169613
-    Name: trestbps, dtype: float64
-
-
 
 
 ```python
@@ -189,22 +180,8 @@ plt.ylabel('Probability Density')
 plt.xlabel('Resting Blood Pressure')
 ```
 
-    Probability of Blood Pressure Falling withing Range for the Given Class: 0.03080251623846908
-
-
-
-
-
-    Text(0.5,0,'Resting Blood Pressure')
-
-
-
-
-![png](index_files/index_26_2.png)
-
-
 > Comment: See https://matplotlib.org/gallery/showcase/integral.html for further details on plotting shaded integral areas under curves.
 
 ## Summary
 
-Well done! In this lab, you implemented the Gaussian Naive Bayes classifier from scratch, used it to generate classification predictions and then validated the accuracy of the model. If you wish to go further, continue on below with some optional extension exercises.
+Well done! In this lab, you implemented the Gaussian Naive Bayes classifier from scratch, used it to generate classification predictions and then validated the accuracy of the model.
