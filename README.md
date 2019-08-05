@@ -402,17 +402,7 @@ def p_x_given_class(obs_row, feature, class_):
     
     p_x_given_y = stats.norm.pdf(obs, loc=mu, scale=std)
     return p_x_given_y
-
-
-X_train.iloc[0]['age'] #obs
-aggs['age']['mean'][0] #mean
-aggs['age']['std'][0] #std
-
-stats.norm.pdf(X_train.iloc[0]['age'], aggs['age']['mean'][0], aggs['age']['std'][0])
-#stats.norm.pdf(obs, loc=mu, scale=std)
-#aggs['age']['std'][0]
-#X.columns[0]
-#p_x_given_class(X_train.iloc[0], X.columns[0], 0)
+p_x_given_class(X_train.iloc[0], X.columns[0], 0)
 ```
 
 
