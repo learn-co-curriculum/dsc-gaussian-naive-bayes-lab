@@ -615,6 +615,15 @@ aggs
 ```
 
 
+
+
+    mean    129.303030
+    std      16.169613
+    Name: trestbps, dtype: float64
+
+
+
+
 ```python
 # __SOLUTION__ 
 temp = df[df.target==1]['trestbps']
@@ -679,6 +688,20 @@ plt.title('Conditional Probability of Resting Blood Pressure ~145 for Those With
 plt.ylabel('Probability Density')
 plt.xlabel('Resting Blood Pressure')
 ```
+
+    Probability of Blood Pressure Falling withing Range for the Given Class: 0.03080251623846919
+
+
+
+
+
+    Text(0.5, 0, 'Resting Blood Pressure')
+
+
+
+
+![png](index_files/index_42_2.png)
+
 
 
 ```python
