@@ -370,13 +370,23 @@ def p_x_given_class(obs_row, feature, class_):
     
     p_x_given_y = stats.norm.pdf(obs, loc=mu, scale=std)
     return p_x_given_y
-p_x_given_class(X_train.iloc[0], X.columns[0], 0)
+
+
+X_train.iloc[0]['age'] #obs
+aggs['age']['mean'][0] #mean
+aggs['age']['std'][0] #std
+
+stats.norm.pdf(X_train.iloc[0]['age'], aggs['age']['mean'][0], aggs['age']['std'][0])
+#stats.norm.pdf(obs, loc=mu, scale=std)
+#aggs['age']['std'][0]
+#X.columns[0]
+#p_x_given_class(X_train.iloc[0], X.columns[0], 0)
 ```
 
 
 
 
-    0.03253766760429478
+    0.035036938123834606
 
 
 
@@ -432,7 +442,7 @@ acc_test = residuals_test.sum()/len(residuals_test)
 print('Training Accuracy: {}\tTesting Accuracy: {}'.format(acc_train, acc_test))
 ```
 
-    Training Accuracy: 0.8414096916299559	Testing Accuracy: 0.8289473684210527
+    Training Accuracy: 0.8502202643171806	Testing Accuracy: 0.8289473684210527
 
 
 ## Level-Up
@@ -472,7 +482,7 @@ def p_band_x_given_class(obs_row, feature, c, range_width_std):
 
 ## Update the Prediction Function
 
-Now, update the prediction function to use this new conditional probability function. Be sure that you can pass in through the range width variable to this wrapper function.
+Now, update the prediction function to use this new conditional probability function. Be sure that you can pass in the range width variable to this wrapper function.
 
 
 ```python
@@ -526,7 +536,7 @@ plt.legend(loc=(1.01,.85));
 ![png](index_files/index_24_0.png)
 
 
-> Comment: Not a wild difference from our point estimates obtained by using points from the PDF itself, but there is some impact. Interestingly, these graphs will differ substantially in shape depending on the initial train test split used. The recommendation would be to use the point estimates from the PDF itself, or a modest band-width size.
+> Comment: Not a wild difference from our point estimates obtained by using points from the PDF itself, but there is some impact. **Interestingly, these graphs will differ substantially in shape depending on the initial train test split used.** The recommendation would be to use the point estimates from the PDF itself, or a modest band-width size.
 
 ## Additional Appendix: Plotting PDFs and Probability Integrals
 
@@ -586,13 +596,13 @@ plt.ylabel('Probability Density')
 plt.xlabel('Resting Blood Pressure')
 ```
 
-    Probability of Blood Pressure Falling withing Range for the Given Class: 0.03080251623846908
+    Probability of Blood Pressure Falling withing Range for the Given Class: 0.03080251623846919
 
 
 
 
 
-    Text(0.5,0,'Resting Blood Pressure')
+    Text(0.5, 0, 'Resting Blood Pressure')
 
 
 
@@ -604,4 +614,4 @@ plt.xlabel('Resting Blood Pressure')
 
 ## Summary
 
-Well done! In this lab, you implemented the Gaussian Naive Bayes classifier from scratch, used it to generate classification predictions and then validated the accuracy of the model. If you wish to go further, continue on below with some optional extension exercises.
+Well done! In this lab, you implemented the Gaussian Naive Bayes classifier from scratch, used it to generate classification predictions and then validated the accuracy of the model.
