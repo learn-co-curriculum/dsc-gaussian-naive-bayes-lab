@@ -494,6 +494,8 @@ def predict_class(obs_row, how='bands', range_width_std=.25):
 
 Finally, create a for loop to measure the impact of varying range-widths on the classifier's test and train accuracy. Iterate over various range-widths from .1 standard deviations to 2 standard deviations. For each of these, store the associated test and train accuracies. Finally, plot these on a graph. The x-axis should be the associated range-width (expressed in standard deviations; each feature will have a unique width applicable to the specific scale). The y-axis will be the associated accuracy. Be sure to include a legend for train accuracy versus test accuracy.
 
+_Note: You can expect your code to take over two minutes to run on a computer with a 2.7 GHz speed CPU._
+
 
 ```python
 #Your code here
