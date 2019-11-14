@@ -3,7 +3,7 @@
 
 ## Introduction
 
-Now that you've seen how to employ multinomial Bayes for classification, its time to practice implementing the process yourself. Afterward, you'll get a chance to further investigate the impacts of using true probabilities under the probability density function as opposed to the point estimate on the curve itself.
+Now that you've seen how to employ multinomial Bayes for classification, its time to practice implementing the process yourself. You'll also get a chance to investigate the impacts of using true probabilities under the probability density function as opposed to the point estimate on the curve itself.
 
 ## Objectives
 
@@ -11,19 +11,21 @@ You will be able to:
 
 * Independently code and implement the Gaussian Naive Bayes algorithm
 
-## Load the Dataset
+## Load the dataset
 
-To start, load the dataset stored in the file 'heart.csv'. The dataset contains various measurements regarding patients and a 'target' feature indicating whether or not they have heart disease. You'll be building a GNB classifier to help determine whether future patients do or do not have heart disease. As reference, this dataset was taken from Kaggle. You can see the original data post here: https://www.kaggle.com/ronitf/heart-disease-uci.
+To get started, load the dataset stored in the file `'heart.csv'`. The dataset contains various measurements regarding patients and a `'target'` feature indicating whether or not they have heart disease. You'll be building a GNB classifier to help determine whether future patients do or do not have heart disease. As reference, this dataset was taken from Kaggle. You can see the original data post here: https://www.kaggle.com/ronitf/heart-disease-uci.
 
 
 ```python
-#Your code here; load the dataset
+# Your code here 
+# Load the dataset
+
 ```
 
 
 ```python
 # __SOLUTION__ 
-#Your code here; load the dataset
+# Load the dataset
 import pandas as pd
 
 df = pd.read_csv('heart.csv')
@@ -162,13 +164,15 @@ df.head()
 
 ```python
 # __SOLUTION__ 
-pd.plotting.scatter_matrix(df, figsize=(10,10)); #Optional but always recommended; briefly explore your dataset
+# Optional but always recommended; briefly explore your dataset
+pd.plotting.scatter_matrix(df, figsize=(10,10)); 
 ```
 
 
 ```python
 # __SOLUTION__ 
-df.target.value_counts() #Optional but always recommended; briefly explore your dataset
+# Optional but always recommended; briefly explore your dataset
+df['target'].value_counts() 
 ```
 
 
@@ -180,55 +184,59 @@ df.target.value_counts() #Optional but always recommended; briefly explore your 
 
 
 
-## Define the Problem
+## Define the problem
 
-As discussed, the dataset contains various patient measurements along with a 'target' variable indicating whether or not the individual has heart disease. Define X and y below.
+As discussed, the dataset contains various patient measurements along with a `'target'` variable indicating whether or not the individual has heart disease. Define `X` and `y` below: 
 
 
 ```python
-#Your code here
+# Your code here
 ```
 
 
 ```python
 # __SOLUTION__ 
-#Your code here
-X = df[[col for col in df.columns if col!='target']]
-y = df.target
+# Your code here
+X = df[[col for col in df.columns if col != 'target']]
+y = df['target']
 ```
 
-## Perform a Train-Test Split
+## Perform a Train-test split
 
-While not demonstrated in the previous lesson, you've seen from your work with regression that an appropriate methodology to determine how well your algorithm will generalize to new data is to perform a train test split. 
+While not demonstrated in the previous lesson, you've seen from your work with regression that an appropriate methodology to determine how well your algorithm will generalize to new data is to perform a train-test split. 
 
-> Note: Use random state 22 to have your results match those of the solution branch provided.
+> Note: Set `random_state` to 22 and `test_size` to 0.25 to have your results match those of the solution branch provided.
 
 
 ```python
-#Your code here; perform a train-test split
+# Your code here
+# Perform a train-test split 
+
 ```
 
 
 ```python
 # __SOLUTION__ 
-#Your code here; perform a train-test split
+# Perform a train-test split 
 from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X,y, random_state=22)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=22)
 ```
 
-## Calculate the Mean & Standard Deviation of Each Feature for Each Class In the Train Set
+## Calculate the mean & standard deviation of each feature for each class in the training set
 
 Now, calculate the mean and standard deviation for each feature within each of the target class groups. This will serve as your a priori distribution estimate to determine the posterior likelihood of an observation belonging to one class versus the other.
 
 
 ```python
-#Your code here; calculate the mean and standard deviation for each feature within each class for the training set
+# Your code here 
+# Calculate the mean and standard deviation for each feature within each class for the training set
+
 ```
 
 
 ```python
 # __SOLUTION__ 
-#Your code here; calculate the mean and standard deviation for each feature within each class for the training set
+# Calculate the mean and standard deviation for each feature within each class for the training set
 train = pd.concat([X_train, y_train], axis=1)
 aggs = train.groupby('target').agg(['mean', 'std'])
 aggs
@@ -376,7 +384,7 @@ aggs
 
 
 
-## Define a Function to Calculate the Point Estimate for the Conditional Probability of a Feature Value for a Given Class
+## Define a function to calculate the point estimate for the conditional probability of a feature value for a given class
 
 Recall that the point estimate is given by the probability density function of the normal distribution:  
 
@@ -386,19 +394,20 @@ Recall that the point estimate is given by the probability density function of t
 
 
 ```python
-#Your code here
+# Your code here
 ```
 
 
 ```python
 # __SOLUTION__ 
-#Your code here
+# Your code here
 from scipy import stats
 def p_x_given_class(obs_row, feature, class_):
     mu = aggs[feature]['mean'][class_]
     std = aggs[feature]['std'][class_]
-
-    obs = obs_row[feature] #observation
+    
+    # Observation
+    obs = obs_row[feature] 
     
     p_x_given_y = stats.norm.pdf(obs, loc=mu, scale=std)
     return p_x_given_y
@@ -412,24 +421,25 @@ p_x_given_class(X_train.iloc[0], X.columns[0], 0)
 
 
 
-## Define a Prediction Function 
+## Define a prediction function 
 
 Define a prediction function that will return a predicted class value for a particular observation. To do this, calculate the point estimates for each of the features using your function above. Then, take the product of these point estimates for a given class and multiply it by the probability of that particular class. Take the class associated with the largest probability output from these calculations as your prediction.
 
 
 ```python
-##Your code here
+# Your code here
 ```
 
 
 ```python
 # __SOLUTION__ 
-##Your code here
+# Your code here
 import numpy as np
 def predict_class(obs_row):
     c_probs = []
     for c in range(2):
-        p = len(y_train[y_train==c])/len(y_train) #Initialize probability to relative probability of class
+        # Initialize probability to relative probability of class
+        p = len(y_train[y_train == c])/len(y_train) 
         for feature in X.columns:
             p *= p_x_given_class(obs_row, feature, c)
         c_probs.append(p)
@@ -449,32 +459,32 @@ predict_class(X_train.iloc[0])
 
 
 
-## Apply Your Prediction Function to the Train and Test Sets
+## Apply your prediction function to the training and test sets
 
 
 ```python
-#Your code here
+# Your code here
 ```
 
 
 ```python
 # __SOLUTION__ 
-#Your code here
+# Your code here
 y_hat_train = [predict_class(X_train.iloc[idx]) for idx in range(len(X_train))]
 y_hat_test = [predict_class(X_test.iloc[idx]) for idx in range(len(X_test))]
 ```
 
-## Calculate the Train and Test Accuracy
+## Calculate the training and test accuracy
 
 
 ```python
-#Your code here
+# Your code here
 ```
 
 
 ```python
 # __SOLUTION__ 
-#Your code here
+# Your code here
 residuals_train = y_hat_train == y_train
 acc_train = residuals_train.sum()/len(residuals_train)
 
@@ -486,29 +496,30 @@ print('Training Accuracy: {}\tTesting Accuracy: {}'.format(acc_train, acc_test))
     Training Accuracy: 0.8502202643171806	Testing Accuracy: 0.8289473684210527
 
 
-## Level-Up
+## Level up (Optional)
 
-### Adapting Point Estimates for the Conditional Probability Into True Probability Estimates
+### Adapting point estimates for the conditional probability into true probability estimates
 
-As discussed, the point estimate from the probability density function is not a true probability measurement. Recall that the area under a probability density function is 1, representing the total probability of all possible outcomes. Accordingly, to determine the probability of a feature measurement occurring, you would need to find the area under some portion of the PDF. Determining appropriate bounds for this area however, is a bit tricky and arbitrary. For example, when generating a class prediction, you would want to know the probability of a patient having a resting blood pressure of 145 given that they had heart disease versus the probability of having a resting blood pressure of 145 given that the did not have heart disease. Previously, you've simply used the point where x=145 on the PDF curve to do this. However, the probability of any single point is actually 0. To calculate an actual probability, you would have to create a range around the observed value such as "what is the probability of having a resting blood pressure between 144 and 146 inclusive?" Alternatively, you could narrow the range and rewrite the problem as "what is the probability of having a resting blood pressure between 144.5 and 145.5?" Since defining these bounds is arbitrary, a potentially interesting research question is how various band methods might impact output predictions and the overall accuracy of the algorithm.
+As discussed, the point estimate from the probability density function is not a true probability measurement. Recall that the area under a probability density function is 1, representing the total probability of all possible outcomes. Accordingly, to determine the probability of a feature measurement occurring, you would need to find the area under some portion of the PDF. Determining appropriate bounds for this area however, is a bit tricky and arbitrary. For example, when generating a class prediction, you would want to know the probability of a patient having a resting blood pressure of 145 given that they had heart disease versus the probability of having a resting blood pressure of 145 given that the did not have heart disease. Previously, you've simply used the point where x=145 on the PDF curve to do this. However, the probability of any single point is actually 0. To calculate the actual probability, you would have to create a range around the observed value such as "what is the probability of having a resting blood pressure between 144 and 146 inclusive?" Alternatively, you could narrow the range and rewrite the problem as "what is the probability of having a resting blood pressure between 144.5 and 145.5?" Since defining these bounds is arbitrary, a potentially interesting research question is how various band methods might impact output predictions and the overall accuracy of the algorithm.
 
 
-## Rewriting the Conditional Probability Formula
+## Rewriting the conditional probability formula
 
-Rewrite your conditional probability formula above to take a feature observation, a given class and a range width and calculate the actual probability beneath the PDF curve of an observation falling within the range of the given width centered at the given observation value. For example, taking up the previous example of resting blood pressure, you might calculate the probability of having a resting blood pressure within 1bp of 145 given that a patient has heart disease. In this case, the range width would be 2bp (144bp to 146bp) and the corresponding area under the PDF curve for the normal distribution would look like this:  
+Rewrite your conditional probability formula above to take a feature observation, a given class, and a range width and calculate the actual probability beneath the PDF curve of an observation falling within the range of the given width centered at the given observation value. For example, taking the previous example of resting blood pressure, you might calculate the probability of having a resting blood pressure within 1bp of 145 given that a patient has heart disease. In this case, the range width would be 2bp (144bp to 146bp) and the corresponding area under the PDF curve for the normal distribution would look like this:  
 
 <img src="images/pdf_integral.png">
 
-With that, write such a function below.
+With that, write such a function below: 
 
 
 ```python
 def p_band_x_given_class(obs_row, feature, c, range_width_std):
-    """obs_row is the observation in question.
-    feature is the feature of the observation row for which you are calculating a conditional probability for.
-    C is the class flag for the conditional probability.
-    Range width is the range in standard deviations of the feature variable to calculate the integral under the PDF curve for"""
-    #Your code here
+    """obs_row is the observation in question 
+    feature is the feature of the observation row for which you are calculating a conditional probability 
+    c is the class flag for the conditional probability 
+    range_width_std is the range in standard deviations of the feature variable to calculate the integral under the PDF curve for"""
+    # Your code here 
+    
     return p_x_given_y
 ```
 
@@ -516,14 +527,16 @@ def p_band_x_given_class(obs_row, feature, c, range_width_std):
 ```python
 # __SOLUTION__ 
 def p_band_x_given_class(obs_row, feature, c, range_width_std):
-    """obs_row is the observation in question.
-    feature is the feature of the observation row for which you are calculating a conditional probability for.
-    C is the class flag for the conditional probability.
-    Range width is the range in standard deviations of the feature variable to calculate the integral under the PDF curve for"""
+    """obs_row is the observation in question 
+    feature is the feature of the observation row for which you are calculating a conditional probability
+    c is the class flag for the conditional probability
+    range_width_std is the range in standard deviations of the feature variable to calculate the integral under the PDF curve for"""
+    
     mu = aggs[feature]['mean'][c]
     std = aggs[feature]['std'][c]
-
-    obs = obs_row[feature] #observation
+    
+    # observation
+    obs = obs_row[feature] 
     interval_min = obs - range_width_std*std/2
     interval_max = obs + range_width_std*std/2
     
@@ -533,23 +546,26 @@ def p_band_x_given_class(obs_row, feature, c, range_width_std):
     return p_x_given_y
 ```
 
-## Update the Prediction Function
+## Update the prediction function
 
-Now, update the prediction function to use this new conditional probability function. Be sure that you can pass in the range width variable to this wrapper function.
+Now, update the `predict_class()` function to use this new conditional probability function. Be sure that you can pass in the range width variable to this wrapper function.
 
 
 ```python
-#Your code here; update the prediction function
+# Your code here
+# Update the prediction function
+
 ```
 
 
 ```python
 # __SOLUTION__ 
-#Your code here; update the prediction function
+# Update the prediction function
 def predict_class(obs_row, how='bands', range_width_std=.25):
     c_probs = []
     for c in range(2):
-        p = len(y_train[y_train==c])/len(y_train) #Initialize probability to relative probability of class
+        # Initialize probability to relative probability of class
+        p = len(y_train[y_train == c])/len(y_train) 
         for feature in X.columns:
             if how == 'bands':
                 p *= p_band_x_given_class(obs_row, feature, c, range_width_std=range_width_std)
@@ -559,26 +575,27 @@ def predict_class(obs_row, how='bands', range_width_std=.25):
     return np.argmax(c_probs)
 ```
 
-## Experiment with the Impact of Various Range-Widths
+## Experiment with the impact of various range-widths
 
-Finally, create a for loop to measure the impact of varying range-widths on the classifier's test and train accuracy. Iterate over various range-widths from .1 standard deviations to 2 standard deviations. For each of these, store the associated test and train accuracies. Finally, plot these on a graph. The x-axis should be the associated range-width (expressed in standard deviations; each feature will have a unique width applicable to the specific scale). The y-axis will be the associated accuracy. Be sure to include a legend for train accuracy versus test accuracy.
+Finally, write a `for` loop to measure the impact of varying range-widths on the classifier's test and train accuracy. Iterate over various range-widths from 0.1 standard deviations to 2 standard deviations. For each of these, store the associated test and train accuracies. Finally, plot these on a graph. The x-axis should be the associated range-width (expressed in standard deviations; each feature will have a unique width applicable to the specific scale). The y-axis will be the associated accuracy. Be sure to include a legend for train accuracy versus test accuracy.
 
 _Note:_ ⏰ _Expect your code to take over two minutes to run._
 
 
 ```python
-#Your code here
+# Your code here
+
 ```
 
 
 ```python
 # __SOLUTION__ 
-#Your code here
+# Your code here
 import matplotlib.pyplot as plt
 %matplotlib inline
 train_accs = []
 test_accs = []
-range_stds = np.linspace(.1,2, num=21)
+range_stds = np.linspace(0.1, 2, num=21)
 for range_std in range_stds:    
     y_hat_train = [predict_class(X_train.iloc[idx], range_width_std=range_std) for idx in range(len(X_train))]
     y_hat_test = [predict_class(X_test.iloc[idx], range_width_std=range_std) for idx in range(len(X_test))]
@@ -603,32 +620,23 @@ plt.legend(loc=(1.01,.85));
 ![png](index_files/index_35_0.png)
 
 
-> Comment: Not a wild difference from our point estimates obtained by using points from the PDF itself, but there is some impact. **Interestingly, these graphs will differ substantially in shape depending on the initial train test split used.** The recommendation would be to use the point estimates from the PDF itself, or a modest band-width size.
+> Comment: Not a wild difference from our point estimates obtained by using points from the PDF itself, but there is some impact. **Interestingly, these graphs will differ substantially in shape depending on the initial train-test split used.** The recommendation would be to use the point estimates from the PDF itself, or a modest band-width size.
 
-## Additional Appendix: Plotting PDFs and Probability Integrals
+## Appendix: Plotting PDFs and probability integrals
 
 Below, feel free to take a look at the code used to generate the PDF graph image above.
 
 
 ```python
-temp = df[df.target==1]['trestbps']
+temp = df[df['target'] == 1]['trestbps']
 aggs = temp.agg(['mean', 'std'])
 aggs
 ```
 
 
-
-
-    mean    129.303030
-    std      16.169613
-    Name: trestbps, dtype: float64
-
-
-
-
 ```python
 # __SOLUTION__ 
-temp = df[df.target==1]['trestbps']
+temp = df[df['target'] == 1]['trestbps']
 aggs = temp.agg(['mean', 'std'])
 aggs
 ```
@@ -691,20 +699,6 @@ plt.ylabel('Probability Density')
 plt.xlabel('Resting Blood Pressure')
 ```
 
-    Probability of Blood Pressure Falling withing Range for the Given Class: 0.03080251623846919
-
-
-
-
-
-    Text(0.5, 0, 'Resting Blood Pressure')
-
-
-
-
-![png](index_files/index_42_2.png)
-
-
 
 ```python
 # __SOLUTION__ 
@@ -734,7 +728,7 @@ plt.ylabel('Probability Density')
 plt.xlabel('Resting Blood Pressure')
 ```
 
-    Probability of Blood Pressure Falling withing Range for the Given Class: 0.03080251623846919
+    Probability of Blood Pressure Falling withing Range for the Given Class: 0.03080251623846908
 
 
 
@@ -752,4 +746,4 @@ plt.xlabel('Resting Blood Pressure')
 
 ## Summary
 
-Well done! In this lab, you implemented the Gaussian Naive Bayes classifier from scratch, used it to generate classification predictions and then validated the accuracy of the model.
+Well done! In this lab, you implemented the Gaussian Naive Bayes classifier from scratch, and used it to generate classification predictions and validated the accuracy of the model.
